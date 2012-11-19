@@ -36,3 +36,7 @@ build/
 # vagrant stuff
 Vagrantfile
 .vagrant
+
+# aksw.publicdata.eu stuff
+/data
+/static
