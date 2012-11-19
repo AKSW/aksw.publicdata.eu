@@ -1,6 +1,6 @@
 class ubuntu {
 
-    $ow_server_name     = 'ontowiki.local'
+    $ow_server_name     = 'aksw.publicdata.eu'
     $ow_application_env = 'development'
 
     $webserver_user = 'vagrant'

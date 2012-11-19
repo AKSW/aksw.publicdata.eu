@@ -1,5 +1,12 @@
 <VirtualHost *:80>
         ServerName  <%= ow_server_name %>
+        ServerAlias epo.publicdata.eu
+        ServerAlias n-lex.publicdata.eu
+        ServerAlias eur-lex.publicdata.eu
+        ServerAlias prelex.publicdata.eu
+        ServerAlias agencies.publicdata.eu
+        ServerAlias unodc.publicdata.eu
+        
         SetEnv APPLICATION_ENV "<%= ow_application_env %>"
         SetEnv VAGRANT "yes"
 
