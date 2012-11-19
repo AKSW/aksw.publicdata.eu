@@ -300,3 +300,15 @@ ifndef MPATH
 	@echo "Example: MPATH=path/to/the/submodule/"
 	@exit 1
 endif
+
+# custom aksw.publicdata.eu stuff
+page-symlinks:
+	ln -sf /vagrant/page/epo.phtml /vagrant/extensions/page/page/epo.phtml
+	ln -sf /vagrant/page/n-lex.phtml /vagrant/extensions/page/page/n-lex.phtml
+	ln -sf /vagrant/page/eur-lex.phtml /vagrant/extensions/page/page/eur-lex.phtml
+	ln -sf /vagrant/page/prelex.phtml /vagrant/extensions/page/page/prelex.phtml
+	ln -sf /vagrant/page/agencies.phtml /vagrant/extensions/page/page/agencies.phtml
+	ln -sf /vagrant/page/unodc.phtml /vagrant/extensions/page/page/unodc.phtml
+	
+
+
