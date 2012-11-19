@@ -5,5 +5,6 @@ This repository is used for publicdata.eu OntoWiki deployments, which serve LATC
 - epo.publicdata.eu
 - n-lex.publicdata.eu
 - eur-lex.publicdata.eu
+- prelex.publicata.eu
 - agencies.publicdata.eu
 - unodc.publicdata.eu
