@@ -1,0 +1,44 @@
+<VirtualHost *:80>
+    ServerAdmin frischmuth@informatik.uni-leipzig.de
+    ServerName aksw.publicdata.eu
+    ServerAlias epo.publicdata.eu
+
+    DocumentRoot /home/pfrischmuth/var/www/aksw-publicdata-eu/current
+    <Directory /home/pfrischmuth/var/www/aksw-publicdata-eu/current>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride All
+        Order allow,deny
+        allow from all
+        
+        <Files "*.ini">
+            Deny from all
+        </Files>
+        
+        <IfModule mod_rewrite.c>
+            RewriteEngine On
+
+            # This gives ontowiki an easy hint that rewrite is enabled
+            <IfModule mod_env.c>
+                SetEnv ONTOWIKI_APACHE_MOD_REWRITE_ENABLED 1
+            </IfModule>
+    
+            RewriteCond %{DOCUMENT_ROOT}/maintenance.html -f
+            RewriteCond %{REQUEST_FILENAME} !/maintenance.html
+            RewriteRule ^.*$ /maintenance.html [R=503,L]
+
+            RewriteRule ^favicon\.(.*)$ application/favicon.$1
+            RewriteRule !((robots.txt|maintenance.html)|(extensions|libraries|static).*|\.(js|ico|gif|jpg|png|css|php|swf|json))$ index.php
+
+            # Set RewriteBase only if your OntoWiki folder is not located in your web server's root dir.
+            #RewriteBase /ontowiki
+        </IfModule>
+    </Directory>
+
+    ErrorLog /home/pfrischmuth/var/www/aksw-publicdata-eu/shared/logs/error.log
+
+    # Possible values include: debug, info, notice, warn, error, crit,
+    #         # alert, emerg.
+    LogLevel warn
+
+    CustomLog /home/pfrischmuth/var/www/aksw-publicdata-eu/shared/logs/access.log combined
+</VirtualHost>
