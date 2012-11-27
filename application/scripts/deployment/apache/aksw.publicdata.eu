@@ -15,8 +15,8 @@
         Order allow,deny
     </Proxy>
 
-    ProxyPass /sparql http://localhost:8850/sparql
-    ProxyPassReverse /sparql http://localhost:8850/sparql
+    ProxyPass /sparql http://localhost:8890/sparql
+    ProxyPassReverse /sparql http://localhost:8890/sparql
 
     DocumentRoot /home/pfrischmuth/var/www/aksw-publicdata-eu/current
     <Directory /home/pfrischmuth/var/www/aksw-publicdata-eu/current>
