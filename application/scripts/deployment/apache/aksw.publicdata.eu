@@ -1,7 +1,22 @@
 <VirtualHost *:80>
     ServerAdmin frischmuth@informatik.uni-leipzig.de
     ServerName aksw.publicdata.eu
+    ServerAlias agencies.publicdata.eu
     ServerAlias epo.publicdata.eu
+    ServerAlias eur-lex.publicdata.eu
+    ServerAlias n-lex.publicdata.eu
+    ServerAlias prelex.publicdata.eu
+    ServerAlias unodc.publicdata.eu
+    
+    ProxyRequests Off
+    ProxyPreserveHost On
+    <Proxy *>
+        Allow from all
+        Order allow,deny
+    </Proxy>
+
+    ProxyPass /sparql http://localhost:8850/sparql
+    ProxyPassReverse /sparql http://localhost:8850/sparql
 
     DocumentRoot /home/pfrischmuth/var/www/aksw-publicdata-eu/current
     <Directory /home/pfrischmuth/var/www/aksw-publicdata-eu/current>
@@ -33,6 +48,8 @@
             #RewriteBase /ontowiki
         </IfModule>
     </Directory>
+
+    ErrorDocument 503 /maintenance.html
 
     ErrorLog /home/pfrischmuth/var/www/aksw-publicdata-eu/shared/logs/error.log
 
