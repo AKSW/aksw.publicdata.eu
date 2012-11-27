@@ -1,34 +1,61 @@
 <VirtualHost *:80>
-        ServerName  <%= ow_server_name %>
-        ServerAlias epo.publicdata.eu
-        ServerAlias n-lex.publicdata.eu
-        ServerAlias eur-lex.publicdata.eu
-        ServerAlias prelex.publicdata.eu
-        ServerAlias agencies.publicdata.eu
-        ServerAlias unodc.publicdata.eu
+    ServerAdmin frischmuth@informatik.uni-leipzig.de
+    ServerName aksw.publicdata.eu
+    ServerAlias agencies.publicdata.eu
+    ServerAlias epo.publicdata.eu
+    ServerAlias eur-lex.publicdata.eu
+    ServerAlias n-lex.publicdata.eu
+    ServerAlias prelex.publicdata.eu
+    ServerAlias unodc.publicdata.eu
+    
+    ProxyRequests Off
+    ProxyPreserveHost On
+    <Proxy *>
+        Allow from all
+        Order allow,deny
+    </Proxy>
+
+    ProxyPass /sparql http://localhost:8890/sparql
+    ProxyPassReverse /sparql http://localhost:8890/sparql
+
+    DocumentRoot /vagrant
+    <Directory /vagrant>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride All
+        Order allow,deny
+        allow from all
         
-        SetEnv APPLICATION_ENV "<%= ow_application_env %>"
-        SetEnv VAGRANT "yes"
+        <Files "*.ini">
+            Deny from all
+        </Files>
+        
+        <IfModule mod_rewrite.c>
+            RewriteEngine On
 
-        DocumentRoot "<%= ow_document_root %>"
-
-        <Directory <%= ow_document_root %>>
-                Options FollowSymLinks -ExecCGI -Indexes
-                AllowOverride all
-                Order allow,deny
-                Allow from all
-
-            <IfModule mod_php5.c>
-                php_value upload_max_filesize 20M
-                php_value post_max_size 20M
-                php_value error_reporting "E_ALL | E_STRICT"
+            # This gives ontowiki an easy hint that rewrite is enabled
+            <IfModule mod_env.c>
+                SetEnv ONTOWIKI_APACHE_MOD_REWRITE_ENABLED 1
             </IfModule>
-        </Directory>
+    
+            RewriteCond %{DOCUMENT_ROOT}/maintenance.html -f
+            RewriteCond %{REQUEST_FILENAME} !/maintenance.html
+            RewriteRule ^.*$ /maintenance.html [R=503,L]
 
-        # %h (Remote host), %u (Remote user), %t (time), %r (first line of reqest),
-        # %>s (status last request), %b (bytes), %{Referer}i (Referer header), 
-        # %{User-agent} (User-agent header), %T (time to serve request), %f (filename)
-        LogFormat "%h %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" %T \"%f\"" ow
-        ErrorLog <%= "#{ow_document_root}/logs/#{ow_server_name}_error.log" %>
-        CustomLog <%= "#{ow_document_root}/logs/#{ow_server_name}_access.log ow" %>
+            RewriteRule ^favicon\.(.*)$ application/favicon.$1
+            RewriteRule !((robots.txt|maintenance.html)|(extensions|libraries|static).*|\.(js|ico|gif|jpg|png|css|php|swf|json))$ index.php
+
+            # Set RewriteBase only if your OntoWiki folder is not located in your web server's root dir.
+            #RewriteBase /ontowiki
+        </IfModule>
+    </Directory>
+
+    ErrorDocument 503 /maintenance.html
+
+    #ErrorLog /home/pfrischmuth/var/www/aksw-publicdata-eu/shared/logs/error.log
+
+    # Possible values include: debug, info, notice, warn, error, crit,
+    #         # alert, emerg.
+    LogLevel warn
+
+    #CustomLog /home/pfrischmuth/var/www/aksw-publicdata-eu/shared/logs/access.log combined
 </VirtualHost>
